@@ -44,7 +44,7 @@
 >
   <div
     class="add-action-item-button"
-    (click)="toggleActionItem()"
+    (click)="createActionItem()"
     [ngClass]="{
       'dark-theme': darkThemeIsEnabled
     }"
@@ -69,7 +69,7 @@
   [displayAsLinkable]="actionItemIsVisible"
   [taskEditModeEnabled]="true"
   [actionItem]="assignedActionItem"
-  (dialogDiscarded)="toggleActionItem()"
+  (dialogDiscarded)="hideActionItem()"
   (dialogConfirmed)="createLinking()"
   (keydown.escape)="hideActionItem(); $event.stopPropagation()"
 >

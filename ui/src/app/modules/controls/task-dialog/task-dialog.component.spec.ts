@@ -20,6 +20,7 @@ import {emptyActionItem} from '../../domain/action-item';
 import {ActionItemService} from '../../teams/services/action.service';
 import * as moment from 'moment';
 import {after} from 'selenium-webdriver/testing';
+import {emptyThought} from "../../domain/thought";
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
@@ -219,10 +220,21 @@ describe('TaskDialogComponent', () => {
     });
   });
 
-  describe('toggleActionItem', () => {
-    it('should reset the assigned action item if it is false', () => {
-      component.actionItemIsVisible = false;
-      expect(component.assignedActionItem).toEqual(emptyActionItem());
+  describe('createActionItem is called', () => {
+    let testTaskId = 56432;
+
+    beforeEach(() => {
+      component.task = emptyThought();
+      component.task.id = testTaskId;
+      component.createActionItem();
+    });
+
+    it('should display the action item', () => {
+      expect(component.actionItemIsVisible).toBeTruthy();
+    });
+
+    it('should link the created action item to the current task', () => {
+      expect(component.assignedActionItem.thoughtId).toEqual(component.task.id);
     });
   });
 

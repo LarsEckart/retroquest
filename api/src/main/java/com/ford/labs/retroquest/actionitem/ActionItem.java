@@ -47,6 +47,7 @@ public class ActionItem {
     private String assignee;
     private Date dateCreated;
     private boolean archived;
+    private Long thoughtId;
 
     private String getCompletedString() {
         return completed ? "yes" : "no";

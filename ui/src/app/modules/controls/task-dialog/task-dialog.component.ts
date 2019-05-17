@@ -114,7 +114,7 @@ export class TaskDialogComponent implements AfterContentChecked {
       this.assignedActionItem.dateCreated = moment().format();
       this.actionItemService.addActionItem(this.assignedActionItem);
       this.assignedActionItem = emptyActionItem();
-      this.actionItemIsVisible = false;
+      this.hideActionItem();
       this.emitCompleted(true);
       this.hide();
     } else {
@@ -130,11 +130,9 @@ export class TaskDialogComponent implements AfterContentChecked {
     }, 0);
   }
 
-  public toggleActionItem() {
-    this.actionItemIsVisible = !this.actionItemIsVisible;
-    if (!this.actionItemIsVisible) {
-      this.assignedActionItem = emptyActionItem();
-    }
+  public createActionItem() {
+    this.actionItemIsVisible = true;
+    this.assignedActionItem.thoughtId = this.task.id;
   }
 
   hideActionItem() {

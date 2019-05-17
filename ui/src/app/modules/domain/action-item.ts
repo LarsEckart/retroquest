@@ -25,6 +25,7 @@ export interface ActionItem {
   dateCreated: string;
   state?: string;
   archived: boolean;
+  thoughtId?: number;
 }
 
 export function emptyActionItem(): ActionItem {
