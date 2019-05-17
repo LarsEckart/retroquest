@@ -73,6 +73,14 @@ public class ThoughtController {
         thoughtRepository.save(returnedThought);
     }
 
+    @Transactional
+    @GetMapping("/api/team/{teamId}/thought/{thoughtId}")
+    @PreAuthorize("#teamId == authentication.principal")
+    public Thought fetchThought(@PathVariable("teamId") String teamId,
+                          @PathVariable("thoughtId") Long thoughtId, Authentication authentication) {
+        return thoughtRepository.findOne(thoughtId);
+    }
+
     @GetMapping("/api/team/{teamId}/thoughts")
     @PreAuthorize("#teamId == authentication.principal")
     public List<Thought> getThoughtsForTeam(@PathVariable("teamId") String teamId) {
@@ -175,6 +183,4 @@ public class ThoughtController {
         thoughtRepository.deleteAllByTeamId(teamId);
         return new WebsocketDeleteResponse<>(Thought.builder().id(-1L).build());
     }
-
-
 }

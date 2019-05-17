@@ -194,6 +194,23 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
     }
 
     @Test
+    public void canFetchThoughtByID() throws Exception {
+        String expectedText = "Text to fetch";
+        String teamId = "BeachBums";
+        Thought thought = new Thought();
+        thought.setTeamId(teamId);
+        thought.setMessage(expectedText);
+
+        Thought createdThought = thoughtRepository.save(thought);
+
+        String url = "/api/team/" + teamId + "/thought/" + createdThought.getId();
+        mockMvc.perform(get(url)
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt(teamId)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message", is(expectedText)));
+    }
+
+    @Test
     public void submittingModifiedThoughtUpdatesMessage() throws Exception {
         Thought thought = new Thought();
         thought.setTeamId("BeachBums");
@@ -258,6 +275,10 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
                 .andExpect(status().isForbidden());
 
         mockMvc.perform(delete("/api/team/BeachBums/thoughts")
+                .header("Authorization", "Bearer " + jwt))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(get("/api/team/BeachBums/thought/1")
                 .header("Authorization", "Bearer " + jwt))
                 .andExpect(status().isForbidden());
     }
