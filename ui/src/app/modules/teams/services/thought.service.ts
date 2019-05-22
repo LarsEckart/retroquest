@@ -33,6 +33,10 @@ export class ThoughtService {
     return this.http.get<Array<Thought>>(`/api/team/${teamId}/thoughts`);
   }
 
+  fetchThought (teamId: string, thoughtId: number): Observable<Thought> {
+    return this.http.get<Thought>(`/api/team/${teamId}/thought/${thoughtId}`);
+  }
+
   addThought (thought: Thought): void {
     this.websocket.createThought(thought);
   }

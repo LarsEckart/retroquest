@@ -63,6 +63,18 @@ describe('ThoughtService', () => {
     });
   });
 
+  describe('fetchThought', () => {
+    it('should request a thought from the thoughts api', () => {
+      const teamId = 'team-id';
+      const thoughtId = 1;
+
+      const returnObj = service.fetchThought(teamId, thoughtId);
+
+      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/thought/${thoughtId}`);
+      expect(returnObj instanceof Observable).toBe(true);
+    });
+  });
+
   describe('addThought', () => {
     it('should send thought to the thoughts websocket', () => {
       service.addThought(thought);

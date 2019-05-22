@@ -239,4 +239,27 @@ describe('ActionItemTaskComponent', () => {
       expect(fakeEvent.preventDefault).toHaveBeenCalled();
     });
   });
+
+  describe('displayAssociatedTask', () => {
+
+    beforeEach(() => {
+      component.displayThoughtClicked = jasmine.createSpyObj({emit: null});
+    });
+
+    it('should emit the thought ID related to the action item', () => {
+      let testId = 7654321;
+      component.actionItem = emptyActionItem();
+      component.actionItem.thoughtId = testId;
+
+      component.displayAssociatedTask();
+
+      expect(component.displayThoughtClicked.emit).toHaveBeenCalledWith(testId);
+    });
+
+    it('should not emit if no thought ID is associated', () => {
+      component.displayAssociatedTask();
+
+      expect(component.displayThoughtClicked.emit).not.toHaveBeenCalled()
+    });
+  });
 });

@@ -134,7 +134,7 @@
          [ngClass]="{'opacify': (actionItem.completed  && !actionItem.archived) || taskEditModeEnabled}"
     >created
     </div>
-    <div class="date-created-value"
+    <div (click)="displayAssociatedTask()" class="date-created-value"
          [ngClass]="{'opacify': (actionItem.completed  && !actionItem.archived) || taskEditModeEnabled}"
     >{{getDateCreated()}}
     </div>

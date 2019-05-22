@@ -25,6 +25,9 @@ import * as moment from 'moment';
 import {ColumnResponse} from '../../../domain/column-response';
 import {WebsocketResponse} from '../../../domain/websocket-response';
 import {Column} from '../../../domain/column';
+import {ThoughtService} from "../../services/thought.service";
+import {Thought} from "../../../domain/thought";
+import {TaskDialogComponent} from "../../../controls/task-dialog/task-dialog.component";
 
 @Component({
   selector: 'rq-actions-column',
@@ -34,7 +37,8 @@ import {Column} from '../../../domain/column';
 })
 export class ActionsColumnComponent implements OnInit {
 
-  constructor(private actionItemService: ActionItemService) {
+  constructor(private actionItemService: ActionItemService,
+              private thoughtService: ThoughtService) {
   }
 
   @Input() actionItemAggregation: ColumnResponse;
@@ -46,9 +50,11 @@ export class ActionsColumnComponent implements OnInit {
   sorted = false;
 
   @ViewChild('actionItemDialog') actionItemDialog: ActionItemDialogComponent;
+  @ViewChild('taskDialog') taskDialog: TaskDialogComponent;
 
   selectedActionItem: ActionItem = emptyActionItem();
   dialogIsVisible = false;
+  currentThought: Thought = null;
 
   ngOnInit(): void {
 
@@ -175,4 +181,16 @@ export class ActionsColumnComponent implements OnInit {
     return dateCreated;
   }
 
+  displayThoughtClicked(thoughtId: number) {
+    this.thoughtService.fetchThought(this.teamId, thoughtId).subscribe((thought) => {
+      this.currentThought = thought;
+      this.currentThought.discussed = false;
+      this.taskDialog.show();
+    });
+  }
+
+  hideThought() {
+    this.currentThought = null;
+    this.taskDialog.hide();
+  }
 }

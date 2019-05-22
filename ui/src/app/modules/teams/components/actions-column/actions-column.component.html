@@ -31,6 +31,7 @@
     (messageChanged)="onMessageChanged($event, actionItem)"
     (assigneeUpdated)="onAssigneeUpdated($event, actionItem)"
     (messageClicked)="displayPopup(actionItem)"
+    (displayThoughtClicked)="displayThoughtClicked($event)"
     [@fadeInOutAnimation]="actionItem.state"
     [theme]="theme"
   >
@@ -62,3 +63,12 @@
   (assignedUpdated)="onAssigneeUpdated($event, selectedActionItem)"
 >
 </rq-action-item-dialog>
+
+<rq-task-dialog
+  #taskDialog
+  [theme]="theme"
+  [task]="currentThought"
+  (deleted)="hideThought()"
+  (completed)="hideThought()"
+>
+</rq-task-dialog>

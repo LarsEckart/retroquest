@@ -48,6 +48,7 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   @Output() assigneeUpdated: EventEmitter<string> = new EventEmitter<string>();
   @Output() dialogDiscarded: EventEmitter<void> = new EventEmitter();
   @Output() dialogConfirmed: EventEmitter<void> = new EventEmitter();
+  @Output() displayThoughtClicked: EventEmitter<number> = new EventEmitter<number>();
 
   @ViewChild('content_value') editableTextArea: ElementRef;
   @ViewChild('assignee_text_field') assigneeTextField: ElementRef;
@@ -152,6 +153,12 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   public emitRemoveAssignee(actionItem: ActionItem) {
     actionItem.assignee = null;
     this.assigneeUpdated.emit(actionItem.assignee);
+  }
+
+  public displayAssociatedTask() {
+    if (this.actionItem.thoughtId) {
+      this.displayThoughtClicked.emit(this.actionItem.thoughtId);
+    }
   }
 
   public setMessageLength(textContent: string): void {

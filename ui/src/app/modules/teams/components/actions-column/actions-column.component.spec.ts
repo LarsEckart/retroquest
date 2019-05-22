@@ -18,11 +18,16 @@
 import {ActionsColumnComponent} from './actions-column.component';
 import {ActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
+import {ThoughtService} from "../../services/thought.service";
+import {emptyThought, Thought} from "../../../domain/thought";
+import {anyNumber, when} from "ts-mockito";
+import {Observable, of} from "rxjs";
 
 describe('ActionsColumnComponent', () => {
   let component: ActionsColumnComponent;
 
   let mockActionItemService: ActionItemService;
+  let mockThoughtService: ThoughtService;
   let fakeActionItem: ActionItem;
 
   beforeEach(() => {
@@ -31,7 +36,12 @@ describe('ActionsColumnComponent', () => {
       deleteActionItem: null
     });
 
-    component = new ActionsColumnComponent(mockActionItemService);
+    mockThoughtService = jasmine.createSpyObj({
+      fetchThought: null
+    });
+
+    component = new ActionsColumnComponent(mockActionItemService,
+      mockThoughtService);
 
     fakeActionItem = {
       id: -1,
@@ -130,6 +140,51 @@ describe('ActionsColumnComponent', () => {
     it('should set the selected action item index to the index passed in', () => {
       component.displayPopup(fakeActionItem);
       expect(component.selectedActionItem).toEqual(fakeActionItem);
+    });
+  });
+
+  describe('displayThoughtClicked', () => {
+    let thoughtId;
+    let thought: Thought;
+    beforeEach(() => {
+      thoughtId = 1234;
+      thought = emptyThought();
+
+      thought.id = thoughtId;
+      component.teamId = '4321';
+      mockThoughtService = jasmine.createSpyObj({
+        fetchThought: of(thought)
+      });
+
+      component = new ActionsColumnComponent(mockActionItemService,
+        mockThoughtService);
+
+      component.taskDialog = jasmine.createSpyObj({
+        show: null
+      });
+    });
+
+    it('should set the selected thought when requested', () => {
+      component.displayThoughtClicked(thoughtId);
+
+      expect(component.currentThought).toEqual(thought);
+      expect(component.taskDialog.show).toHaveBeenCalled();
+    })
+  });
+
+  describe('hideThought', () => {
+    beforeEach(() => {
+      component.currentThought = emptyThought();
+      component.taskDialog = jasmine.createSpyObj({
+        hide: null
+      });
+    });
+
+    it('should null out the current thought and hide the dialog', () => {
+      component.hideThought();
+
+      expect(component.currentThought).toBeNull();
+      expect(component.taskDialog.hide).toHaveBeenCalled();
     });
   });
 });
